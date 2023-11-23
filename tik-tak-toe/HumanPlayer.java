@@ -1,38 +1,32 @@
 import java.util.ActionListener;
 
-public class HumanPlayer extends Player{
+public class HumanPlayer extends Player implements ActionListener{
 
     public HumanPlayer(String name){
         super(name);
-        this.actionListener = actionListener;
+        this.buttonListener = buttonListener;
 
     }
 
 
     public int[][] getActiveCoordinates(){
-        protected void makeMove() {
 
-            actionListener = new ActionListener;
+    }
 
+        protected void makeMove(buttonListener bl) {
+            JButton pressedButton = bl.getTarget();
 
-            //if makeMove != activeCoordinates but does == currentGameNmbr && currentRoundNmbr
-            //get private int currentGameNmbr
-            //get private int currentRoundNmbr;
-            int row = actionListener.nextInt();
-            int col = actionListener.nextInt();
+            public JButton actionPerformed(ActionEvent e) {
+                return e.target activeCoordinates
+            if(button[x][y].getTitle().equals("")){
 
-            if (e.getSource() == buttons[i][j] && buttons[i][j].getText().isEmpty()) {
+                makeMove(set.JButtonTitle(markIn));
 
-                coordinates[0] = i;
-                coordinates[1] = j;
-
-                buttons[i][j].setText("X"); //Anpassa "X" efter spelare
+                }
             }
 
-            //if (actionListener != activeCoordinates,
 
         }
         return super.activeCoordinates;
-    }
 
 }
