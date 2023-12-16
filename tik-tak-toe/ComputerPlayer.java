@@ -20,7 +20,7 @@ public class ComputerPlayer extends Player {
      *
      *
      *
-     * @param PlayingField playingField
+     * @param  playingField
      */
     @Override
     protected void makeMove(PlayingField playingField) {
@@ -45,6 +45,11 @@ public class ComputerPlayer extends Player {
         return super.activeCoordinates;
 
 
+
+    }
+
+    @Override
+    protected void makeMove(PlayingField playingField, int[] moveCoordinates) {
 
     }
 }

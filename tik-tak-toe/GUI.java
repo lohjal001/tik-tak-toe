@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentListener;
 
 public class GUI implements ActionListener {
     /*Upon drawing active coordinates we complete a round so we can use that method to update a counter for roundNmbr
@@ -13,7 +12,7 @@ public class GUI implements ActionListener {
      */
     private int roundNmbr = 1;
     /*Values reflected in name, O at index 0 and x at index 1*/
-    private final char[] oAndX = {'O','X'};
+    private final char[] xAndO = {'X','O'};
     private final JFrame framePlayingField;
     private final JPanel panelOuterPlayingField;
     private final JPanel panelInnerPlayingField;
@@ -22,7 +21,7 @@ public class GUI implements ActionListener {
     private final JButton[][] buttonArray = new JButton[3][3];
     private JButton b = new JButton();
     /*An action-listener array we can send to the playing-field to trigger on action-performed on GUI*/
-    private ActionListener[][] buttonListeners = new ActionListener[3][3];
+
     private boolean is1PlayerMode;
     /*Let´s us use the inputs from the player(s)*/
     private String[] playerNames = new String[2];
@@ -54,7 +53,6 @@ public class GUI implements ActionListener {
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 3; k++) {
                 buttonArray[i][k] = new JButton();
-                buttonArray[i][k].addActionListener(this);
                 panelInnerPlayingField.add(buttonArray[i][k]);
             }
         }
@@ -69,7 +67,7 @@ public class GUI implements ActionListener {
         String[] options = {"1 Spelare", "2 Spelare"};
         String n = (String) JOptionPane.showInputDialog(null, "Vänligen välj antal spelare",
                 "Tic-tac-toe", JOptionPane.QUESTION_MESSAGE, optionIcon, options, options[1]);
-        is1PlayerMode = (n.equals("1 Spelare")) ? true : false;
+        is1PlayerMode = n.equals(options[0]);
         if (is1PlayerMode) {
 
             playerNames[0] = JOptionPane.showInputDialog(null, "Vänligen ange spelarnamn:", "Tic-tac-toe", JOptionPane.QUESTION_MESSAGE);
@@ -89,6 +87,20 @@ public class GUI implements ActionListener {
 
     }
 
+    /**This method adds the specified ActionListener to the buttons
+     *
+     * @param buttonListener
+     */
+    public void setActionListener(ActionListener buttonListener){
+        for(int i = 0 ; i < 3 ; i++) for(int k = 0; k < 3; k++){
+            /*Adds the external listeners to the buttonArray*/
+            buttonArray[i][k].addActionListener(buttonListener);
+
+        }
+
+        }
+
+
     /**
      * This updates the GUI according to the latest move
      *
@@ -100,15 +112,17 @@ public class GUI implements ActionListener {
         for (int playerIndex = 0; playerIndex < 2; playerIndex++)
             for (int row = 0; row < 3; row++)
                 for (int col = 0; col < 3; col++) {
-                    String s = (playerArray[playerIndex].activeCoordinates[col][row] == 1) ? String.valueOf(playerArray[playerIndex].getMark()) : "";
-                    buttonArray[col][row].setText(s);
+                    if(playerArray[playerIndex].getActiveCoordinates()[col][row] == 1) {
+                        buttonArray[col][row].setText(String.valueOf(playerArray[playerIndex].getMark()));
+                    }
+
 
                 }
-           framePlayingField.invalidate();
-            framePlayingField.validate();
-            framePlayingField.repaint();
 
-        //for(int i = 0; i < 2 ; i++)playerArray[i];
+        framePlayingField.invalidate();
+        framePlayingField.validate();
+        framePlayingField.repaint();
+
 
 
     }
@@ -154,18 +168,18 @@ public class GUI implements ActionListener {
         /*Gets the instance of the specified button affected by action performed and sets it to variable we can work with*/
         b = (JButton) e.getSource();
         /*On the first move we know it´s always X and it´s always empty everwhere*/
-        if(roundNmbr == 1){
-            b.setText(String.valueOf(oAndX[1]));
-            /*First round done*/
-            roundNmbr++;
-        }
+
         /*May return null or maybe get some fuckery if: "" =(nothing) isnt in the ASCII-table.... well, we´ll see*/
         if(b.getText().equalsIgnoreCase("")){
-           b.setText("");
+           b.setText(String.valueOf(xAndO[(roundNmbr + 1) % 2]));
 
+            framePlayingField.invalidate();
+            framePlayingField.validate();
+            framePlayingField.repaint();
 
 
         }
+
     }
 
     /**
@@ -177,11 +191,10 @@ public class GUI implements ActionListener {
         return playerNames;
     }
 
-    public ActionListener[][] getButtonListeners() {
-        return buttonListeners;
-    }
+
 
     public JButton[][] getButtonArray() {
         return buttonArray;
     }
+
 }

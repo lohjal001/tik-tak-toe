@@ -1,33 +1,46 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-public class PlayingField implements ActionListener  {
+public class PlayingField  {
     private final char[] xAndO = {'X', 'O'};
     private GUI graphicalUserInterface;
     private final int[][][][] playingFieldArray;
     private  int currentGameNmbr;
     private  int currentRoundNmbr;
     /*This lets us store the action-listener objects from the GUI -> When the event is triggered actionPerformed is triggered here too*/
-    private ActionListener[][] buttonListeners;
+    private final  ActionListener buttonListener;
 
     private boolean gameisOver;
     private final int scoreX = 0;
     private final int scoreO = 0;
     /*The game will never have more than two players so we can declare it as final*/
-    private final Player[] playerArray = new Player[2];
+    private Player[] playerArray = new Player[2];
 
 
-    public PlayingField(GUI graphicalUserInterfaceIn) {
+    public PlayingField(GUI graphicalUserInterfaceIn,Player[] playerArrayIn) {
+        playerArray = playerArrayIn;
         /*When we create a PlayingField the board should be laid out*/
         graphicalUserInterface = graphicalUserInterfaceIn;
         /*Once the visual field is generated and the player-selection is done we should add our actionlisteners*/
         JButton[][] buttonArray = graphicalUserInterface.getButtonArray();
-        for(int row = 0 ; row < graphicalUserInterface.getButtonArray()[0].length ; row++) for (int col = 0 ; col < graphicalUserInterface.getButtonArray().length ; col++){
+        buttonListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int[] coordinatesOfClickedButton = graphicalUserInterface.getCoordinatesOfClickedButton((JButton)e.getSource());
 
 
+                if((((JButton) e.getSource()).getText().equals(""))){
+                    /*Overly clear representation of not doing anything*/
+                    playerArray[(currentRoundNmbr+1) % 2].makeMove(PlayingField.this, coordinatesOfClickedButton);
+                    graphicalUserInterface.drawActiveCoordinates(playerArray);
+                    Main.actionMade = true;
+                    System.out.println(playerArray[(currentRoundNmbr+1)%2].getActiveCoordinates());
 
-        }
+
+                }
+            }
+        };
+        graphicalUserInterfaceIn.setActionListener(buttonListener);
         currentGameNmbr = 1;
         currentRoundNmbr = 1;
         playingFieldArray = new int[3][3][11][11];
@@ -40,6 +53,9 @@ public class PlayingField implements ActionListener  {
                     for (int m = 0; m < 11; m++) {
                         playingFieldArray[j][k][h][m] = 0;
                     }
+
+
+
 
         }
 
@@ -71,42 +87,27 @@ public void setGraphicalUserInterface(GUI graphicalUserInterfaceIn){
         return currentRoundNmbr;
     }
 
-    /**Upon being called, if the button is not occupied we add to the roundNumber and update the activeCoordinates for the player
-     *
-     *
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-       int[] coordinatesOfClickedButton = graphicalUserInterface.getCoordinatesOfClickedButton((JButton)e.getSource());
 
 
-       if(!(((JButton) e.getSource()).getText().equals(""))){
-          /*Overly clear representation of not doing anything*/
-            currentRoundNmbr = currentRoundNmbr;
+    public void increaseRoundNumber(){
 
+        currentRoundNmbr++;
 
-        }
-        else {
-            /*Since we use modulus we have to parry that 2%1 = -1 and 2%1 = 0*/
-
-           playerArray[(currentRoundNmbr+1) % 2].makeMove(this, coordinatesOfClickedButton);
-            currentRoundNmbr++;
-            graphicalUserInterface.drawActiveCoordinates(playerArray);
-
-        }
     }
 
-    /**Gets the actionlisteners imposed on the buttonArray inside GUI
+    /**Gets the actionlistener to be imposed on the buttonArray inside GUI
      *
      *
-     * @return ActionListener[][] buttonListeners ; ActionLi
+     * @return buttonListener
      */
-    public ActionListener[][] getButtonListeners() {
-        return buttonListeners;
+    public ActionListener getButtonListener() {
+        return buttonListener;
     }
+
+
 }
+
+
 
 
 
