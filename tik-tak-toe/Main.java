@@ -1,3 +1,5 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -6,6 +8,8 @@ public class Main {
     public static boolean actionMade;
 
     public static void main(String[] args){
+
+
         /*Makes sure we don´t instance more Randomgenerators than needed*/
         Random rand = new Random();
          char[] xandO = {'X', 'O'};
@@ -31,8 +35,14 @@ public class Main {
             playerArray[0].setMark(xandO[index]);
             playerArray[1].setMark(xandO[1-index]);
              ticTacToeBoard = new PlayingField(graphicalUserInterface, playerArray);
+            ActionListener buttonListenerMain = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ticTacToeBoard.increaseRoundNumber();
+                }
+            };
             graphicalUserInterface.setActionListener(ticTacToeBoard.getButtonListener());
-
+            graphicalUserInterface.setActionListener(buttonListenerMain);
 
 
         }

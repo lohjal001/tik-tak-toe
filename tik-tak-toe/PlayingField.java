@@ -30,11 +30,11 @@ public class PlayingField  {
 
 
                 if((((JButton) e.getSource()).getText().equals(""))){
-                    /*Overly clear representation of not doing anything*/
-                    playerArray[(currentRoundNmbr+1) % 2].makeMove(PlayingField.this, coordinatesOfClickedButton);
+
+                    playerArray[(currentRoundNmbr) % 2].makeMove(PlayingField.this, coordinatesOfClickedButton);
                     graphicalUserInterface.drawActiveCoordinates(playerArray);
-                    Main.actionMade = true;
-                    System.out.println(playerArray[(currentRoundNmbr+1)%2].getActiveCoordinates());
+                    currentRoundNmbr++;
+
 
 
                 }
@@ -42,7 +42,7 @@ public class PlayingField  {
         };
         graphicalUserInterfaceIn.setActionListener(buttonListener);
         currentGameNmbr = 1;
-        currentRoundNmbr = 1;
+        currentRoundNmbr = 2;
         playingFieldArray = new int[3][3][11][11];
         /*I instance the gamesArray with possible rounds, should be one more than possible rounds and
         and a possibility for 10 games which is more than our proposed bestOutOf3GamesMode */
