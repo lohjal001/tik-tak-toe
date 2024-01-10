@@ -5,7 +5,9 @@ import java.util.Random;
 
 public class Main {
 
-    public static boolean actionMade;
+    public static boolean seriesOfGamesIsOver = false;
+    public static boolean gameIsOver = false;
+
 
     public static void main(String[] args){
 
@@ -17,7 +19,6 @@ public class Main {
 
         /*The players active in the game, can be of subclass Computer/HumanPlayer*/
         Player[] playerArray = new Player[2];
-        boolean gameIsOver = false;
         /*When we implement the choice-buttons we neeeeeeeeeeeeeed to change this to 0*/
         GUI graphicalUserInterface = new GUI();
         PlayingField ticTacToeBoard;
@@ -64,24 +65,15 @@ public class Main {
 
         }
 
+        while(!seriesOfGamesIsOver) {
 
 
+            while (!gameIsOver) {
+                /*Upon checking with breakpoints its clear the program never enters the if-statement -> boolean not updated*/
 
-        actionMade = false;
-        while(!gameIsOver){
-            /*Upon checking with breakpoints its clear the program never enters the if-statement -> boolean not updated*/
-            if(actionMade){
-
-                ticTacToeBoard.increaseRoundNumber();
-                System.out.println(Arrays.deepToString(playerArray[0].getActiveCoordinates()));
-                System.out.println(Arrays.deepToString(playerArray[1].getActiveCoordinates()));
-
-                /*Resets so we know we´´e watiing for action*/
-                actionMade = false;
             }
+
         }
-
-
     }
 
 }

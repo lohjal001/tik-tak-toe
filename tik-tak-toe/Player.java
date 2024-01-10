@@ -2,6 +2,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public abstract class Player {
+
+    protected int wins;
+
+    protected int losses;
     protected int[][] activeCoordinates;
     protected String name;
 
@@ -11,6 +15,8 @@ public abstract class Player {
     protected Player(String nameIn) {
         this.name = nameIn;
         this.activeCoordinates = new int[3][3];
+        wins = 0;
+        losses = 0;
 
         for (int i = 0; i < 3; i++) {
 
@@ -62,4 +68,19 @@ public abstract class Player {
     }
 
     protected abstract void makeMove(PlayingField playingField, int[] moveCoordinates);
+
+    protected void addLossOrWin(boolean ifWin){
+
+        if(ifWin) wins++;
+        else losses++;
+
+    }
+
+    public int getLosses() {
+        return losses;
+    }
+
+    public int getWins() {
+        return wins;
+    }
 }

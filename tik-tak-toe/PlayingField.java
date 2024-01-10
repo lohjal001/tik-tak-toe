@@ -33,6 +33,7 @@ public class PlayingField  {
 
                     playerArray[(currentRoundNmbr) % 2].makeMove(PlayingField.this, coordinatesOfClickedButton);
                     graphicalUserInterface.drawActiveCoordinates(playerArray);
+                   if(graphicalUserInterface.announceIfWin(playerArray[(currentRoundNmbr) % 2],coordinatesOfClickedButton) );/*This should trigger a method in main*/
                     currentRoundNmbr++;
 
 

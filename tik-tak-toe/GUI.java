@@ -25,7 +25,7 @@ public class GUI  {
     private boolean is1PlayerMode;
     /*Let´s us use the inputs from the player(s)*/
     private String[] playerNames = new String[2];
-
+    private ImageIcon optionIcon;
     public GUI() {
 
         roundNmbr = 1;
@@ -56,7 +56,7 @@ public class GUI  {
                 panelInnerPlayingField.add(buttonArray[i][k]);
             }
         }
-        ImageIcon optionIcon = new ImageIcon("529185.png");
+         optionIcon = new ImageIcon("529185.png");
         String[] selectionTexts = {"1 Spelare", "2 spelare"};
 //        JOptionPane singleOrMultiplayerPane = new JOptionPane(selectionTexts,JOptionPane.QUESTION_MESSAGE,JOptionPane.YES_NO_OPTION,optionIcon);
 //        singleOrMultiplayerPane.setSize(200,200);
@@ -180,4 +180,118 @@ public class GUI  {
         return buttonArray;
     }
 
-}
+    /**This method checks the player activeCoordinates
+     * for their last move and determines if that was a winning one.
+     * If so it announces a win for that player and then asks if they want to play again. If so true is returned
+     * @param latestActivePlayer
+     * @param lastMoveCoordinates
+     * @return wantsToPlayAgain
+     */
+    public boolean announceIfWin(Player latestActivePlayer, int[] lastMoveCoordinates){
+        boolean win = false;
+
+        int[][] activeCoordinates = latestActivePlayer.getActiveCoordinates();
+
+        /*If any of them returns true win will be set to true*/
+
+        win = ((checkRow(latestActivePlayer, lastMoveCoordinates) || (checkColumn(latestActivePlayer, lastMoveCoordinates)) || (checkDiagonal(latestActivePlayer, lastMoveCoordinates))));
+        if(win) latestActivePlayer.addLossOrWin(true);
+        if(win) {
+            String[] message = {latestActivePlayer.name + " vann på runda : " + roundNmbr};
+            String[] option = {"Vidare"};
+            JOptionPane.showOptionDialog(null, message, "Gratulerar!", JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE, optionIcon, option, option);
+            String[] options = {"Spela igen", "Avsluta"};
+            String n = (String) JOptionPane.showInputDialog(null, "Önskar ni att spela igen?",
+                    "Tic-tac-toe", JOptionPane.QUESTION_MESSAGE, optionIcon, options, options[1]);
+           boolean playAgain = n.equals(options[0]);
+           if(playAgain) {
+               Main.gameIsOver = true;
+
+               return true;
+           }
+           else {
+               Main.gameIsOver = true;
+               Main.seriesOfGamesIsOver = true;
+            }
+
+        }
+        return false;
+    }
+
+    /**Checks the last move and sees if it led to a win, if so it returns
+     * true, otherwise false
+     *
+     * @return ifWin
+     */
+      private static boolean checkRow(Player lastActivePlayer, int[] lastMoveCoordinates){
+          /*Before we check for a win the win-token is set to false*/
+          boolean win = false;
+          int[][] activeCoordinates = lastActivePlayer.getActiveCoordinates();
+          /*Since we make a move there*/
+          int numberInRow = 1;
+          /*Here we start the at the column of the last move and check the row of that column, if it is filled*/
+          for(int i = lastMoveCoordinates[1]+1; i < lastMoveCoordinates[1] +3 ; i++){
+              if(activeCoordinates[lastMoveCoordinates[0]][i % activeCoordinates.length] == 1) numberInRow++;
+              /*Once we reach three in a row we set win to true */
+              if(numberInRow == 3) win = true;
+
+          }
+          return win;
+
+      }
+
+    /**Returns true if the column is filled with the players marks
+     *
+     * @param lastActivePlayer
+     * @param lastMoveCoordinates
+     * @return win
+     */
+      private static boolean checkColumn(Player lastActivePlayer, int[] lastMoveCoordinates){
+          /*Before we check for a win the win-token is set to false*/
+          boolean win = false;
+          int[][] activeCoordinates = lastActivePlayer.getActiveCoordinates();
+          /*Since we make a move there*/
+          int numberInRow = 1;
+          /*Here we start the at the column of the last move and check the row of that column, if it is filled*/
+          for(int i = lastMoveCoordinates[0]+1; i < lastMoveCoordinates[0] +3 ; i++){
+              if(activeCoordinates[i% activeCoordinates.length][lastMoveCoordinates[1]] == 1) numberInRow++;
+              /*Once we reach three in a row we set win to true */
+              if(numberInRow == 3) win = true;
+
+          }
+          return win;
+
+
+      }
+
+    /**Returns true if the diagonal is occupied with the player´s marks
+     *
+     *
+     * @param lastActivePlayer
+     * @param lastMoveCoordinates
+     * @return ifWin
+     */
+      private static boolean checkDiagonal(Player lastActivePlayer, int[] lastMoveCoordinates) {
+          /*Before we check for a win the win-token is set to false*/
+          boolean win = false;
+          int[][] activeCoordinates = lastActivePlayer.getActiveCoordinates();
+          /*Since we make a move there*/
+          int numberInRow = 1;
+          /*We only need to check the diagonals if the centerpiece is occupied, otherwise it will never win*/
+          if ((lastMoveCoordinates[0] == 1 && lastMoveCoordinates[1] == 1) || (activeCoordinates[1][1] == 1)) {
+              /*Since we know the centerpiece is occupied we just need to pair-wise check the left and right diagonal*/
+              if(activeCoordinates[0][0] == 1 && activeCoordinates[2][2] == 1) return win = true;
+              else if(activeCoordinates[2][0] == 1 && activeCoordinates[0][2] == 1) return win = true;
+
+
+
+          }
+          return false;
+      }
+    }
+
+
+
+
+
+
