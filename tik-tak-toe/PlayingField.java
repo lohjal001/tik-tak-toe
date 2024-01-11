@@ -29,21 +29,26 @@ public class PlayingField  {
                 int[] coordinatesOfClickedButton = graphicalUserInterface.getCoordinatesOfClickedButton((JButton)e.getSource());
 
 
-                if((((JButton) e.getSource()).getText().equals(""))){
+                if((((JButton) e.getSource()).getText().equals("") && !(Main.gameIsOver))){
 
-                    playerArray[(currentRoundNmbr) % 2].makeMove(PlayingField.this, coordinatesOfClickedButton);
+                    playerArray[(currentRoundNmbr+1) % 2].makeMove(PlayingField.this, coordinatesOfClickedButton);
                     graphicalUserInterface.drawActiveCoordinates(playerArray);
-                   if(graphicalUserInterface.announceIfWin(playerArray[(currentRoundNmbr) % 2],coordinatesOfClickedButton) );/*This should trigger a method in main*/
-                    currentRoundNmbr++;
-
+                   if(graphicalUserInterface.announceIfWin(playerArray[(currentRoundNmbr+1) % 2],coordinatesOfClickedButton )) {
+                       startNewGame();
+                       ;/*This should trigger a method in main*/
+                   }
+                   else{
+                        currentRoundNmbr++;
+                    }
 
 
                 }
+
             }
         };
         graphicalUserInterfaceIn.setActionListener(buttonListener);
         currentGameNmbr = 1;
-        currentRoundNmbr = 2;
+        currentRoundNmbr = 1;
         playingFieldArray = new int[3][3][11][11];
         /*I instance the gamesArray with possible rounds, should be one more than possible rounds and
         and a possibility for 10 games which is more than our proposed bestOutOf3GamesMode */
@@ -105,7 +110,24 @@ public void setGraphicalUserInterface(GUI graphicalUserInterfaceIn){
         return buttonListener;
     }
 
+    public void setPlayerArray(Player[] playerArray) {
+        this.playerArray = playerArray;
+    }
 
+    /**This method cleans the board and increases game-number
+     *
+     */
+    public void startNewGame(){
+    /*This sets the activeCoordinates to zero*/
+    playerArray[0].resetActiveCoordinates();
+    playerArray[1].resetActiveCoordinates();
+    graphicalUserInterface.resetButtonTexts();
+    graphicalUserInterface.resetUnableButtons();
+    currentRoundNmbr = 1;
+    currentGameNmbr++;
+
+
+    }
 }
 
 

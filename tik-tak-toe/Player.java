@@ -83,4 +83,15 @@ public abstract class Player {
     public int getWins() {
         return wins;
     }
+
+    /**This method sets the activeCoordinatearray for the player to zero across the board
+     *
+     */
+    public void resetActiveCoordinates(){
+        for(int i = 0 ; i < activeCoordinates.length ; i++) for(int k = 0 ; k < activeCoordinates.length ; k++){
+            activeCoordinates[i][k] = 0;
+
+        }
+
+    }
 }

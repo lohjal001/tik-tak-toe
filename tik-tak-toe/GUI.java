@@ -26,6 +26,7 @@ public class GUI  {
     /*Let´s us use the inputs from the player(s)*/
     private String[] playerNames = new String[2];
     private ImageIcon optionIcon;
+    public boolean gameJustRestarted = false;
     public GUI() {
 
         roundNmbr = 1;
@@ -191,6 +192,7 @@ public class GUI  {
         boolean win = false;
 
         int[][] activeCoordinates = latestActivePlayer.getActiveCoordinates();
+        buttonArray[lastMoveCoordinates[0]][lastMoveCoordinates[1]].setEnabled(false);
 
         /*If any of them returns true win will be set to true*/
 
@@ -206,6 +208,7 @@ public class GUI  {
            boolean playAgain = n.equals(options[0]);
            if(playAgain) {
                Main.gameIsOver = true;
+               gameJustRestarted = true;
 
                return true;
            }
@@ -288,6 +291,31 @@ public class GUI  {
           }
           return false;
       }
+
+    /**This method resets the button text for a new game
+     *
+     *
+     */
+    public void resetButtonTexts(){
+            for(int i = 0 ; i < buttonArray.length ; i++) for(int k = 0 ; k < buttonArray.length ; k++){
+                buttonArray[i][k].setText("");
+
+            }
+
+
+        }
+
+    /**This sets .setEnabled(true) for all buttons
+     *
+     */
+    public void resetUnableButtons(){
+            for(int i = 0 ; i < buttonArray.length ; i++) for(int k = 0 ; k < buttonArray.length ; k++){
+                buttonArray[i][k].setEnabled(true);
+
+            }
+
+
+        }
     }
 
 

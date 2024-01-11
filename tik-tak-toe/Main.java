@@ -7,7 +7,8 @@ public class Main {
 
     public static boolean seriesOfGamesIsOver = false;
     public static boolean gameIsOver = false;
-
+    static Player player1;
+    static Player player2;
 
     public static void main(String[] args){
 
@@ -66,12 +67,28 @@ public class Main {
         }
 
         while(!seriesOfGamesIsOver) {
+            gameIsOver = false;
+            if(ticTacToeBoard.getCurrentGameNmbr() > 1){
 
+                /*Will generate new Random-object each time, see if we can fix that*/
+
+                int index = rand.nextInt(0, 2);
+                player1.setMark(xandO[index]);
+                player2.setMark(xandO[1 - index]);
+                /*Upon activating setting marks we want the x-having player to be first in the array*/
+                playerArray = new Player[]{(Player) player1, (Player) player2};
+
+                if (player1.getMark() == 'O') playerArray = new Player[]{(Player) player2, (Player) player1};
+                ticTacToeBoard.setPlayerArray(playerArray);
+
+
+            }
 
             while (!gameIsOver) {
                 /*Upon checking with breakpoints its clear the program never enters the if-statement -> boolean not updated*/
 
             }
+            ticTacToeBoard.startNewGame();
 
         }
     }
